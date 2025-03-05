@@ -1,0 +1,23 @@
+{
+    "name": "safeeyes-mac",
+    "version": "1.0.0",
+    "description": "SafeEyes for macOS - A break reminder app",
+    "main": "main.js",
+    "scripts": {
+      "start": "electron .",
+      "pack": "electron-builder --dir",
+      "dist": "electron-builder"
+    },
+    "build": {
+      "appId": "com.safeeyes.mac",
+      "mac": {
+        "category": "public.app-category.utilities",
+        "target": ["dmg"]
+      }
+    },
+    "devDependencies": {
+      "electron": "35.0.0",
+      "electron-builder": "25.1.8"
+    }
+  }
+  

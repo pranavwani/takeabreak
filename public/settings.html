@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SafeEyes Settings</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        h2 { text-align: center; margin-bottom: 20px; }
+        
+        .settings-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-height: 450px; /* Prevents content from overflowing */
+            overflow: hidden; /* Ensures no scrolling */
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        label {
+            font-weight: bold;
+            flex: 1;
+        }
+        
+        input {
+            width: 120px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: right;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        
+        button:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+    <h2>SafeEyes Settings</h2>
+    
+    <div class="settings-container">
+        <div class="input-group">
+            <label>Short Break Interval <small>(Minutes)</small>:</label>
+            <input type="number" id="shortBreakInterval">
+        </div>
+        
+        <div class="input-group">
+            <label>Long Break Interval <small>(Minutes)</small>:</label>
+            <input type="number" id="longBreakInterval">
+        </div>
+        
+        <div class="input-group">
+            <label>Short Break Duration <small>(Seconds)</small>:</label>
+            <input type="number" id="shortBreakDuration">
+        </div>
+        
+        <div class="input-group">
+            <label>Long Break Duration <small>(Seconds)</small>:</label>
+            <input type="number" id="longBreakDuration">
+        </div>
+        
+        <div class="input-group">
+            <label>Strict Mode <small>(No Skip)</small>:</label>
+            <input type="checkbox" id="strictMode">
+        </div>
+        
+        <button onclick="saveSettings()">Save Settings</button>
+    </div>
+
+    <script>
+        window.electronAPI.getSettings().then(settings => {
+            document.getElementById("shortBreakInterval").value = settings.shortBreakInterval / 60000; // Convert ms to minutes
+            document.getElementById("longBreakInterval").value = settings.longBreakInterval / 60000; // Convert ms to minutes
+            document.getElementById("shortBreakDuration").value = settings.shortBreakDuration / 1000; // Convert ms to seconds
+            document.getElementById("longBreakDuration").value = settings.longBreakDuration / 1000; // Convert ms to seconds
+            document.getElementById("strictMode").checked = settings.strictMode;
+        });
+
+        function saveSettings() {
+            const shortInterval = document.getElementById("shortBreakInterval").value * 60000; // Convert minutes to ms
+            const longInterval = document.getElementById("longBreakInterval").value * 60000; // Convert minutes to ms
+            const shortDuration = document.getElementById("shortBreakDuration").value * 1000; // Convert seconds to ms
+            const longDuration = document.getElementById("longBreakDuration").value * 1000; // Convert seconds to ms
+            const strictMode = document.getElementById("strictMode").checked;
+
+            window.electronAPI.updateSettings(shortInterval, longInterval, shortDuration, longDuration, strictMode);
+        }
+    </script>
+</body>
+</html>
