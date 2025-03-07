@@ -1,6 +1,14 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain } = require('electron');
+const {
+    app,
+    BrowserWindow,
+    Tray,
+    Menu,
+    ipcMain,
+    nativeImage
+} = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { exec } = require('child_process');
 
 let tray;
 let breakWindow;
@@ -11,6 +19,8 @@ let longBreakInterval = 75 * 60 * 1000; // Default: 75 minutes (ms)
 let shortBreakDuration = 15 * 1000; // Default: 15 seconds (ms)
 let longBreakDuration = 60 * 1000; // Default: 60 seconds (ms)
 const settingsFilePath = path.join(app.getPath('userData'), 'settings.json');
+
+let shortBreakTimer, longBreakTimer; // Timers for scheduling breaks
 
 // Load settings from file or apply defaults
 function loadSettings() {
@@ -30,6 +40,24 @@ function loadSettings() {
     }
 }
 
+// Schedule automatic breaks
+function scheduleBreaks() {
+    if (shortBreakTimer) clearInterval(shortBreakTimer);
+    if (longBreakTimer) clearInterval(longBreakTimer);
+
+    shortBreakTimer = setInterval(
+        () => showFullScreenBreak('short'),
+        shortBreakInterval
+    );
+    longBreakTimer = setInterval(
+        () => showFullScreenBreak('long'),
+        longBreakInterval
+    );
+}
+
+// Start scheduling breaks on app launch
+scheduleBreaks();
+
 // Save settings to file
 function saveSettings() {
     const settings = {
@@ -44,6 +72,16 @@ function saveSettings() {
 
 // Load settings on app startup
 loadSettings();
+
+// Function to play sound
+function playSound(soundFile) {
+    const soundPath = path.join(__dirname, 'assets', soundFile);
+    if (process.platform === 'darwin') {
+        exec(`afplay "${soundPath}"`); // macOS uses afplay
+    } else if (process.platform === 'win32') {
+        exec(`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`); // Windows uses PowerShell
+    }
+}
 
 ipcMain.handle('getSettings', () => ({
     shortBreakInterval,
@@ -69,49 +107,26 @@ ipcMain.handle(
         longBreakDuration = longDuration;
         strictMode = strictModeValue;
         saveSettings();
+        scheduleBreaks(); // Restart scheduling with new settings
     }
 );
 
-const shortBreakExercises = [
-    'Tightly close your eyes',
-    'Roll your eyes a few times to each side',
-    'Rotate your eyes in a clockwise direction',
-    'Rotate your eyes in a counterclockwise direction',
-    'Blink rapidly for 10 seconds, then close your eyes',
-    'Focus on a distant object for 20 seconds',
-    'Drink a glass of water',
-];
-
-const longBreakExercises = [
-    'Walk for a while',
-    'Lean back at your seat and relax',
-    'Stretch your arms and shoulders',
-    'Stand up and do a few squats',
-    'Practice deep breathing',
-    'Shake out your hands and wrists',
-];
-
-function getRandomExercise(breakType) {
-    return breakType === 'short'
-        ? shortBreakExercises[
-              Math.floor(Math.random() * shortBreakExercises.length)
-          ]
-        : longBreakExercises[
-              Math.floor(Math.random() * longBreakExercises.length)
-          ];
-}
-
 function showFullScreenBreak(breakType) {
+
+    playSound("on_pre_break.wav"); // Play start sound
+
     breakWindow = new BrowserWindow({
         fullscreen: true,
         alwaysOnTop: true,
         frame: false,
         transparent: true,
         backgroundColor: '#524d4d',
+        resizable: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
             preload: path.join(__dirname, './preloads/preload_break.js'),
+            additionalArguments: [`--breakType=${breakType}`] // Pass break type
         },
     });
 
@@ -121,6 +136,7 @@ function showFullScreenBreak(breakType) {
 
     breakWindow.on('closed', () => {
         breakWindow = null; // Reset break window reference
+        playSound("on_stop_break.wav"); // Play end sound when break closes
     });
 
     setTimeout(
@@ -148,24 +164,32 @@ function openSettingsWindow() {
     settingsWindow = new BrowserWindow({
         width: 450,
         height: 520, // Fixed height to prevent scrolling
-        resizable: false,
-        title: "SafeEyes Settings",
-        webPreferences: { 
+        resizable: false, // Prevent window resizing
+        title: 'SafeEyes Settings',
+        webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
-            preload: path.join(__dirname, './preloads/preload_settings.js'), 
+            preload: path.join(__dirname, './preloads/preload_settings.js'),
         },
     });
 
     settingsWindow.loadFile(path.join(__dirname, 'public/settings.html'));
 
-    settingsWindow.on("closed", () => {
+    settingsWindow.on('closed', () => {
         settingsWindow = null;
     });
 }
 
-
 app.whenReady().then(() => {
+    // Set app icon for macOS Dock
+    if (process.platform === 'darwin') {
+        const appIcon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'icon.icns'));
+        app.dock.setIcon(appIcon); // Set Dock icon
+    }
+
+    // Hide Dock icon on macOS
+    app.dock.hide();
+
     tray = new Tray(path.join(__dirname, 'assets/tray-icon-light.png'));
     tray.setContextMenu(
         Menu.buildFromTemplate([

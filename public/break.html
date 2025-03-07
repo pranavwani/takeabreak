@@ -18,7 +18,7 @@
         }
         h1 { font-size: 48px; font-weight: bold; margin-bottom: 20px; }
         p { font-size: 28px; margin-bottom: 20px; opacity: 0.9; }
-        #timer { font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #ffcc00; }
+        #timer { font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #ffffff; }
         button {
             font-size: 24px; padding: 12px 40px; border-radius: 25px;
             border: none; cursor: pointer; transition: 0.3s; font-weight: bold;
@@ -37,20 +37,36 @@
         
         // Load settings and exercise from Electron API
         window.electronAPI.getSettings().then(settings => {
-            const exercises = [
-                "Tightly close your eyes",
-                "Roll your eyes a few times to each side",
-                "Rotate your eyes in a clockwise direction",
-                "Rotate your eyes in a counterclockwise direction",
-                "Blink rapidly for 10 seconds, then close your eyes",
-                "Focus on a distant object for 20 seconds",
-                "Drink a glass of water"
-            ];
+
+            console.log(settings);
             
+            const isShortBreak = settings.breakType === "short"; // Detect break type
+
+            const shortBreakExercises = [
+                "Tightly close your eyes for a few seconds and relax.",
+                "Roll your eyes a few times to each side.",
+                "Rotate your eyes in a clockwise direction.",
+                "Rotate your eyes in a counterclockwise direction.",
+                "Blink rapidly for 10 seconds, then close your eyes.",
+                "Focus on a distant object for 20 seconds.",
+                "Drink a glass of water to stay hydrated."
+            ];
+
+            const longBreakExercises = [
+                "Stand up and stretch your entire body.",
+                "Walk around for a few minutes.",
+                "Lean back in your seat and relax.",
+                "Stretch your arms and shoulders.",
+                "Stand up and do a few squats.",
+                "Practice deep breathing: Inhale for 4s, hold for 4s, exhale for 4s.",
+                "Shake out your hands and wrists to relieve tension."
+            ];
+
+            const exercises = isShortBreak ? shortBreakExercises : longBreakExercises;
             const exercise = exercises[Math.floor(Math.random() * exercises.length)];
             document.getElementById("exerciseText").innerText = exercise;
 
-            timeLeft = settings.shortBreakDuration / 1000; // Convert ms to seconds
+            timeLeft = isShortBreak ? settings.shortBreakDuration / 1000 : settings.longBreakDuration / 1000;
             document.getElementById("timer").innerText = timeLeft + " seconds";
 
             if (settings.strictMode) {

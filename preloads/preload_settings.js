@@ -19,5 +19,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
             strictMode
         )
     },
-    getSettings: () => ipcRenderer.invoke('getSettings'),
+    getSettings: () => {
+        return ipcRenderer.invoke("getSettings").then(settings => {
+            const breakType = process.argv.includes("--breakType=short") ? "short" : "long";
+            return { ...settings, breakType };
+        });
+    }
 });

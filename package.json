@@ -1,23 +1,52 @@
 {
-    "name": "safeeyes-mac",
-    "version": "1.0.0",
-    "description": "SafeEyes for macOS - A break reminder app",
-    "main": "main.js",
-    "scripts": {
-      "start": "electron .",
-      "pack": "electron-builder --dir",
-      "dist": "electron-builder"
-    },
-    "build": {
-      "appId": "com.safeeyes.mac",
-      "mac": {
-        "category": "public.app-category.utilities",
-        "target": ["dmg"]
+  "name": "safeeyes",
+  "version": "1.0.0",
+  "description": "SafeEyes - A break reminder app for macOS, Windows, and Linux",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.safeeyes.app",
+    "productName": "SafeEyes",
+    "copyright": "Copyright © 2025 SafeEyes",
+    
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": ["dmg", "zip"],
+      "icon": "assets/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "extendInfo": {
+        "NSCameraUsageDescription": "SafeEyes does not use your camera."
       }
     },
-    "devDependencies": {
-      "electron": "35.0.0",
-      "electron-builder": "25.1.8"
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/icon.ico",
+      "publisherName": "SafeEyes Inc.",
+      "verifyUpdateCodeSignature": false
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "rpm"],
+      "icon": "assets/icon.png",
+      "category": "Utility",
+      "desktop": {
+        "Name": "SafeEyes",
+        "Comment": "A break reminder app for eye protection"
+      }
+    },
+    "directories": {
+      "output": "dist"
     }
+  },
+
+  "devDependencies": {
+    "electron": "35.0.0",
+    "electron-builder": "25.1.8"
   }
-  
+}
