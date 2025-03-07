@@ -1,5 +1,5 @@
 # **TakeABreak Desktop**
-> A modern, cross-platform break reminder app for **macOS, Windows, and Linux**.
+> A modern, cross-platform break reminder app to help you **pause and relax**.
 
 ### **Inspired by** [SafeEyes](https://github.com/slgobinath/SafeEyes)  
 TakeABreak Desktop is an **Electron-based alternative** to the original SafeEyes, designed to provide **customizable break reminders** to reduce **eye strain and fatigue**.
