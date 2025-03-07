@@ -165,7 +165,7 @@ function openSettingsWindow() {
         width: 450,
         height: 520, // Fixed height to prevent scrolling
         resizable: false, // Prevent window resizing
-        title: 'SafeEyes Settings',
+        title: 'TakeABreak Settings',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,

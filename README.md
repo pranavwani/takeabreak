@@ -1,8 +1,8 @@
-# **SafeEyes Desktop**
+# **TakeABreak Desktop**
 > A modern, cross-platform break reminder app for **macOS, Windows, and Linux**.
 
 ### **Inspired by** [SafeEyes](https://github.com/slgobinath/SafeEyes)  
-SafeEyes Desktop is an **Electron-based alternative** to the original SafeEyes, designed to provide **customizable break reminders** to reduce **eye strain and fatigue**.
+TakeABreak Desktop is an **Electron-based alternative** to the original SafeEyes, designed to provide **customizable break reminders** to reduce **eye strain and fatigue**.
 
 ---
 
@@ -18,7 +18,7 @@ SafeEyes Desktop is an **Electron-based alternative** to the original SafeEyes, 
 ---
 
 ## **🛠️ Development**
-Since official builds are **not yet available**, you can build SafeEyes Desktop manually by following these steps:
+Since official builds are **not yet available**, you can build TakeABreak Desktop manually by following these steps:
 
 ### **1️⃣ Install Dependencies**
 ```bash

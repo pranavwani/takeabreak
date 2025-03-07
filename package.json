@@ -1,7 +1,7 @@
 {
-  "name": "safeeyes",
+  "name": "takeabreak",
   "version": "1.0.0",
-  "description": "SafeEyes - A break reminder app for macOS, Windows, and Linux",
+  "description": "TakeABreak - A simple and effective break reminder",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,9 +9,9 @@
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "com.safeeyes.app",
-    "productName": "SafeEyes",
-    "copyright": "Copyright © 2025 SafeEyes",
+    "appId": "com.takeabreak.app",
+    "productName": "TakeABreak",
+    "copyright": "Copyright © 2025 TakeABreak",
     
     "mac": {
       "category": "public.app-category.utilities",
@@ -22,13 +22,13 @@
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "extendInfo": {
-        "NSCameraUsageDescription": "SafeEyes does not use your camera."
+        "NSCameraUsageDescription": "TakeABreak does not use your camera."
       }
     },
     "win": {
       "target": ["nsis", "portable"],
       "icon": "assets/icon.ico",
-      "publisherName": "SafeEyes Inc.",
+      "publisherName": "TakeABreak Inc.",
       "verifyUpdateCodeSignature": false
     },
     "linux": {
@@ -36,7 +36,7 @@
       "icon": "assets/icon.png",
       "category": "Utility",
       "desktop": {
-        "Name": "SafeEyes",
+        "Name": "TakeABreak",
         "Comment": "A break reminder app for eye protection"
       }
     },
