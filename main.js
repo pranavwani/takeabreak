@@ -4,7 +4,7 @@ const {
     Tray,
     Menu,
     ipcMain,
-    nativeImage
+    nativeImage,
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -76,22 +76,29 @@ loadSettings();
 
 // Function to play sound
 function playSound(soundFile) {
-    const soundPath = path.join(__dirname, 'assets', soundFile);
-    
+    const basePath = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets') // Correct path in production
+        : path.join(__dirname, 'assets'); // Dev path
+
+    const soundPath = path.join(basePath, soundFile);
+
     if (process.platform === 'darwin') {
         // macOS uses afplay
         exec(`afplay "${soundPath}"`, (error, stdout, stderr) => {
             if (!error) {
-                console.log(error)
+                console.log(error);
             }
-        }); 
+        });
     } else if (process.platform === 'win32') {
         // Windows uses PowerShell
-        exec(`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`, (error, stdout, stderr) => {
-            if (!error) {
-                console.log(error)
+        exec(
+            `powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`,
+            (error, stdout, stderr) => {
+                if (!error) {
+                    console.log(error);
+                }
             }
-        }); 
+        );
     }
 }
 
@@ -127,7 +134,7 @@ function showFullScreenBreak(breakType) {
     if (isBreakActive) return; // Prevent multiple breaks at the same time
     isBreakActive = true;
 
-    playSound("on_pre_break.wav"); // Play start sound
+    playSound('on_pre_break.wav'); // Play start sound
 
     breakWindow = new BrowserWindow({
         fullscreen: true,
@@ -141,7 +148,7 @@ function showFullScreenBreak(breakType) {
             nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, './preloads/preload_break.js'),
-            additionalArguments: [`--breakType=${breakType}`] // Pass break type
+            additionalArguments: [`--breakType=${breakType}`], // Pass break type
         },
     });
 
@@ -152,7 +159,7 @@ function showFullScreenBreak(breakType) {
     breakWindow.on('closed', () => {
         breakWindow = null; // Reset break window reference
         isBreakActive = false; // Reset flag
-        playSound("on_stop_break.wav"); // Play end sound when break closes
+        playSound('on_stop_break.wav'); // Play end sound when break closes
     });
 
     setTimeout(
@@ -197,16 +204,23 @@ function openSettingsWindow() {
 }
 
 app.whenReady().then(() => {
+    const iconBasePath = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets')
+        : path.join(__dirname, 'assets');
+
+    const trayIconPath = path.join(iconBasePath, 'tray-icon-light.png');
+    const dockIconPath = path.join(iconBasePath, 'icon.icns');
+
     // Set app icon for macOS Dock
     if (process.platform === 'darwin') {
-        const appIcon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'icon.icns'));
+        const appIcon = nativeImage.createFromPath(dockIconPath);
         app.dock.setIcon(appIcon); // Set Dock icon
     }
 
     // Hide Dock icon on macOS
     app.dock.hide();
 
-    tray = new Tray(path.join(__dirname, 'assets/tray-icon-light.png'));
+    tray = new Tray(trayIconPath);
     tray.setContextMenu(
         Menu.buildFromTemplate([
             { label: 'Settings', click: () => openSettingsWindow() },
