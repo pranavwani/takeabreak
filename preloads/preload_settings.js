@@ -8,8 +8,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
         longDuration,
         strictMode
     ) =>{
-        console.log('called');
-        
         ipcRenderer.invoke(
             'updateSettings',
             shortInterval,

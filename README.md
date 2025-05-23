@@ -15,6 +15,10 @@ TakeABreak Desktop is an **Electron-based alternative** to the original SafeEyes
 ✅ **Cross-Platform** – Works on macOS, Windows, and Linux  
 ✅ **Minimal & Lightweight** – Runs quietly in the background  
 
+## **🐞 Known Bugs**
+- Long and short breaks are coming together, it should be one at a time
+- Long breaks window is not getting closed automatically, as well as via Skip button
+
 ---
 
 ## **🛠️ Development**

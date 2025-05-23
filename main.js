@@ -13,6 +13,7 @@ const { exec } = require('child_process');
 let tray;
 let breakWindow;
 let settingsWindow;
+let isBreakActive = false; // Flag to prevent overlapping breaks
 let strictMode = false;
 let shortBreakInterval = 15 * 60 * 1000; // Default: 15 minutes (ms)
 let longBreakInterval = 75 * 60 * 1000; // Default: 75 minutes (ms)
@@ -76,10 +77,21 @@ loadSettings();
 // Function to play sound
 function playSound(soundFile) {
     const soundPath = path.join(__dirname, 'assets', soundFile);
+    
     if (process.platform === 'darwin') {
-        exec(`afplay "${soundPath}"`); // macOS uses afplay
+        // macOS uses afplay
+        exec(`afplay "${soundPath}"`, (error, stdout, stderr) => {
+            if (!error) {
+                console.log(error)
+            }
+        }); 
     } else if (process.platform === 'win32') {
-        exec(`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`); // Windows uses PowerShell
+        // Windows uses PowerShell
+        exec(`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`, (error, stdout, stderr) => {
+            if (!error) {
+                console.log(error)
+            }
+        }); 
     }
 }
 
@@ -112,6 +124,8 @@ ipcMain.handle(
 );
 
 function showFullScreenBreak(breakType) {
+    if (isBreakActive) return; // Prevent multiple breaks at the same time
+    isBreakActive = true;
 
     playSound("on_pre_break.wav"); // Play start sound
 
@@ -122,8 +136,9 @@ function showFullScreenBreak(breakType) {
         transparent: true,
         backgroundColor: '#524d4d',
         resizable: false,
+        useContentSize: false,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, './preloads/preload_break.js'),
             additionalArguments: [`--breakType=${breakType}`] // Pass break type
@@ -136,6 +151,7 @@ function showFullScreenBreak(breakType) {
 
     breakWindow.on('closed', () => {
         breakWindow = null; // Reset break window reference
+        isBreakActive = false; // Reset flag
         playSound("on_stop_break.wav"); // Play end sound when break closes
     });
 
@@ -167,7 +183,7 @@ function openSettingsWindow() {
         resizable: false, // Prevent window resizing
         title: 'TakeABreak Settings',
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, './preloads/preload_settings.js'),
         },
@@ -205,7 +221,7 @@ app.whenReady().then(() => {
             },
             {
                 label: 'Take a Break Now',
-                click: () => showFullScreenBreak('short'),
+                click: () => showFullScreenBreak('long'),
             },
             { label: 'Exit', click: () => app.quit() },
         ])
