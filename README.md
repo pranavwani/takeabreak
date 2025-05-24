@@ -35,9 +35,9 @@ Here’s a short demo showing **manual break triggering** — the app also suppo
 
 | Platform | Type | Link |
 |----------|------|------|
-| macOS M chip | `.dmg` | [Download macOS Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0-arm64.dmg) |
-| Windows | `.exe` | [Download Windows Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak.Setup.1.0.0.exe) |
-| Linux | `.AppImage` | [Download Linux Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0.AppImage) |
+| macOS arm64 | `.dmg` | [Download macOS Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0-arm64.dmg) |
+| Windows x64 | `.exe` | [Download Windows Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak.Setup.1.0.0.exe) |
+| Linux x64 | `.AppImage` | [Download Linux Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0.AppImage) |
 
 ---
 
