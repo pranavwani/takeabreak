@@ -23,7 +23,7 @@
 Here’s a short demo showing **manual break triggering** — the app also supports **automatic breaks** in real usage:
 
 
-> 📽️ *[https://github.com/user-attachments/assets/c59017c2-d190-44ae-9c8e-ea516697168c]
+> 📽️ *[https://github.com/user-attachments/assets/c59017c2-d190-44ae-9c8e-ea516697168c]*
 
 > ✨ Manual breaks shown here are just a sample — the app automatically schedules **short and long breaks** in the background based on your preferences.
 
@@ -35,8 +35,8 @@ Here’s a short demo showing **manual break triggering** — the app also suppo
 
 | Platform | Type | Link |
 |----------|------|------|
-| macOS (M1/Intel) | `.dmg` / `.zip` | [Download macOS Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0-arm64.dmg) |
-| Windows | `.exe` / `.portable` | [Download Windows Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak.Setup.1.0.0.exe) |
+| macOS (M1/Intel) | `.dmg` | [Download macOS Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0-arm64.dmg) |
+| Windows | `.exe` | [Download Windows Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak.Setup.1.0.0.exe) |
 | Linux | `.AppImage` | [Download Linux Pre-release](https://github.com/pranavwani/takeabreak/releases/download/v1.0.0/TakeABreak-1.0.0.AppImage) |
 
 ---
