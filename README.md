@@ -1,4 +1,3 @@
-````markdown
 # 💻 **TakeABreak Desktop**
 > A modern, cross-platform break reminder app to help you **pause and relax**.
 
@@ -23,7 +22,8 @@
 ## 🎥 **Video Preview**
 Here’s a short demo showing **manual break triggering** — the app also supports **automatic breaks** in real usage:
 
-> 📽️ *[https://github.com/user-attachments/assets/c59017c2-d190-44ae-9c8e-ea516697168c]*
+
+> 📽️ ![Demo](https://github.com/user-attachments/assets/c59017c2-d190-44ae-9c8e-ea516697168c)
 
 > ✨ Manual breaks shown here are just a sample — the app automatically schedules **short and long breaks** in the background based on your preferences.
 
